@@ -22,3 +22,19 @@ jobs:
     # Ensure Cargo edition is correct.
     - name: Cargo edition
       run: .tests/cargo-edition
+
+  no-merge-commits:
+    runs-on: ubuntu-latest
+    container: quay.io/enarx/fedora-test
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
+
+    # Ensure pull requests do not contain merge commits.
+    - name: No merge commits
+      # Merge commits have two parent commits. This command iterates through
+      # all commits added by the PR (everything since the base ref) and fails
+      # if it finds multiple parents. If all commits only have one, it exits 
+      # successfully.
+      run: git rev-list origin/${{ github.base_ref }}.. | xargs -n1 -I{} sh -c '! git rev-parse {}^2'
