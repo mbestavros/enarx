@@ -26,3 +26,18 @@ jobs:
     # Ensure all .rs files have an Apache 2.0 SPDX license ID.
     - name: All .rs files have SPDX IDs
       run: .tests/misc-licenses-rs-spdx
+
+  # Ensure there are no merge commits present.
+  misc-merge-commits:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    
+    - name: No merge commits
+      # Merge commits have two parent commits. This command iterates through
+      # all commits added by the PR (everything since the base ref) and fails
+      # if it finds multiple parents. If all commits only have one, it exits 
+      # successfully.
+      run: git rev-list origin/master.. | xargs -n1 -I{} sh -c '! git rev-parse {}^2'
