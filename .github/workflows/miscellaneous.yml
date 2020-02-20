@@ -26,3 +26,6 @@ jobs:
     # Ensure all .rs files have an Apache 2.0 SPDX license ID.
     - name: All .rs files have SPDX IDs
       run: .tests/misc-licenses-rs-spdx
+
+
+# a comment to test merge commits
