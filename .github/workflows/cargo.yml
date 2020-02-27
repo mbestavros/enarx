@@ -78,3 +78,12 @@ jobs:
     # Ensure Cargo.toml's license field is Apache 2.0.
     - name: All Cargo.toml files have a license field
       run: .tests/cargo-toml-package-license
+
+  #Test Enarx's self-hosted SEV runner.
+  enarx-sev-testbox-bss:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: rustfmt-on-enarx-sev
+      run: echo $(whoami) && cargo fmt -- --check
